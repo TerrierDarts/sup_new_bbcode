@@ -33,13 +33,13 @@
     },
     "platformConfig": {
         "macos": {
-            "bundleId": "com.example.plugintemplate-for-obs"
+            "bundleId": "com.streamup.supbbcode"
         }
     },
-    "name": "plugintemplate-for-obs",
-    "displayName": "Plugin Template for OBS",
-    "version": "1.0.0",
-    "author": "Your Name Here",
-    "website": "https://example.com",
-    "email": "me@example.com"
+    "name": "sup-bbcode",
+    "displayName": "StreamUP - BBCode Macros",
+    "version": "0.1.0",
+    "author": "StreamUP Tips",
+    "website": "https://docs.streamup.tips",
+    "email": "dev@streamup.tips"
 }

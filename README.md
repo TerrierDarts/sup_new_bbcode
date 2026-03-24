@@ -1,59 +1,140 @@
-# OBS Plugin Template
-
-## Introduction
-
-The plugin template is meant to be used as a starting point for OBS Studio plugin development. It includes:
-
-* Boilerplate plugin source code
-* A CMake project file
-* GitHub Actions workflows and repository actions
-
-## Supported Build Environments
-
-| Platform  | Tool   |
-|-----------|--------|
-| Windows   | Visual Studio 17 2022 |
-| macOS     | XCode 16.0 |
-| Windows, macOS  | CMake 3.30.5 |
-| Ubuntu 24.04 | CMake 3.28.3 |
-| Ubuntu 24.04 | `ninja-build` |
-| Ubuntu 24.04 | `pkg-config`
-| Ubuntu 24.04 | `build-essential` |
-
-## Quick Start
-
-An absolute bare-bones [Quick Start Guide](https://github.com/obsproject/obs-plugintemplate/wiki/Quick-Start-Guide) is available in the wiki.
-
-## Documentation
-
-All documentation can be found in the [Plugin Template Wiki](https://github.com/obsproject/obs-plugintemplate/wiki).
-
-Suggested reading to get up and running:
-
-* [Getting started](https://github.com/obsproject/obs-plugintemplate/wiki/Getting-Started)
-* [Build system requirements](https://github.com/obsproject/obs-plugintemplate/wiki/Build-System-Requirements)
-* [Build system options](https://github.com/obsproject/obs-plugintemplate/wiki/CMake-Build-System-Options)
-
-## GitHub Actions & CI
-
-Default GitHub Actions workflows are available for the following repository actions:
-
-* `push`: Run for commits or tags pushed to `master` or `main` branches.
-* `pr-pull`: Run when a Pull Request has been pushed or synchronized.
-* `dispatch`: Run when triggered by the workflow dispatch in GitHub's user interface.
-* `build-project`: Builds the actual project and is triggered by other workflows.
-* `check-format`: Checks CMake and plugin source code formatting and is triggered by other workflows.
-
-The workflows make use of GitHub repository actions (contained in `.github/actions`) and build scripts (contained in `.github/scripts`) which are not needed for local development, but might need to be adjusted if additional/different steps are required to build the plugin.
-
-### Retrieving build artifacts
-
-Successful builds on GitHub Actions will produce build artifacts that can be downloaded for testing. These artifacts are commonly simple archives and will not contain package installers or installation programs.
-
-### Building a Release
-
-To create a release, an appropriately named tag needs to be pushed to the `main`/`master` branch using semantic versioning (e.g., `12.3.4`, `23.4.5-beta2`). A draft release will be created on the associated repository with generated installer packages or installation programs attached as release artifacts.
-
-## Signing and Notarizing on macOS
-
-Basic concepts of codesigning and notarization on macOS are explained in the correspodning [Wiki article](https://github.com/obsproject/obs-plugintemplate/wiki/Codesigning-On-macOS) which has a specific section for the [GitHub Actions setup](https://github.com/obsproject/obs-plugintemplate/wiki/Codesigning-On-macOS#setting-up-code-signing-for-github-actions).
+# StreamUP BBCode Macros Plugin
+A powerful OBS Studio plugin that enables advanced BBCode text rendering and effects for text sources.
+## Features
+- **BBCode Text Rendering**: Format text with tags like [b]bold[/b], [i]italic[/i], [u]underline[/u]
+- **Text Effects**: Color, shadow, glow, and advanced styling options
+- **Macros System**: Save and reuse custom BBCode tag combinations
+- **Text Alignment**: Control text positioning (left, center, right)
+- **Animation Effects**: Dynamic text animations and transitions
+- **Image & Emote Support**: Import custom images and emotes (Twitch compatible)
+- **Help Reference**: Built-in BBCode tag reference window
+## Project Structure
+\\\
+src/
+├── plugin-main.cpp           # Main plugin entry point
+├── bbcode-source.h           # Source structure definitions
+├── bbcode-source.cpp         # OBS source registration
+├── bbcode-source-new.cpp     # Alternative source implementation
+├── bbcode-parser.cpp         # BBCode parsing logic
+├── bbcode-renderer.cpp       # Text rendering engine
+├── bbcode-colors.cpp         # Color palette management
+├── bbcode-macros.cpp         # Macro system and editor UI
+├── bbcode-help.cpp           # Help window implementation
+└── plugin-support.h          # Support utilities
+data/
+├── color_multiply.effect     # Shader for color effects
+└── locale/                   # Translation files
+\\\
+## Building
+### Prerequisites
+- CMake 3.28 or higher
+- OBS Studio source code and dependencies
+- Visual Studio 2022 (Windows) or compatible compiler
+### Windows Build
+\\\ash
+# Clone repository
+git clone https://github.com/StreamUPTips/SUP_BB_Code.git
+cd SUP_BB_Code
+# Configure with CMake Presets
+cmake --preset windows-x64
+# Build
+cmake --build build_x64 --config Release
+\\\
+### Linux Build
+\\\ash
+cmake --preset linux-x86_64
+cmake --build build --config Release
+\\\
+### macOS Build
+\\\ash
+cmake --preset macos-universal
+cmake --build build --config Release
+\\\
+## Installation
+### Windows
+1. Build the plugin (see Building section)
+2. Copy sup-bbcode.dll to %AppData%/obs-studio/plugins/sup-bbcode/bin/64bit/
+3. Copy shader files from data/ to %AppData%/obs-studio/plugins/sup-bbcode/data/
+### Linux
+1. Build the plugin
+2. Copy sup-bbcode.so to ~/.config/obs-studio/plugins/sup-bbcode/bin/64bit/
+3. Copy data files to ~/.config/obs-studio/plugins/sup-bbcode/data/
+### macOS
+1. Build the plugin
+2. Copy sup-bbcode.so to ~/Library/Application Support/obs-studio/plugins/sup-bbcode/bin/
+3. Copy data files to ~/Library/Application Support/obs-studio/plugins/sup-bbcode/data/
+## Usage
+1. Add a Text Source to your scene
+2. In the source properties, enable BBCode formatting
+3. Enter BBCode in the text field:
+   - \[b]Bold Text[/b]\
+   - \[i]Italic Text[/i]\
+   - \[u]Underline[/u]\
+   - \[c=FF0000]Red Text[/c]\
+4. Click "BBCode Help / Tag Reference" to see all available tags
+## Supported BBCode Tags
+### Basic Formatting
+- \[b]Bold[/b]\
+- \[i]Italic[/i]\
+- \[u]Underline[/u]\
+- \[s]Strikethrough[/s]\
+### Color & Style
+- \[c=RRGGBB]Colored Text[/c]\
+- \[bg=RRGGBB]Background Color[/bg]\
+- \[size=20]Larger Text[/size]\
+### Layout
+- \[left]Left Aligned[/left]\
+- \[center]Centered[/center]\
+- \[right]Right Aligned[/right]\
+### Advanced
+- \[shadow=2,RRGGBB]Shadow Effect[/shadow]\
+- \[glow=3,RRGGBB]Glow Effect[/glow]\
+- \[animate=shake]Animated Text[/animate]\
+See the help window in the plugin for a complete reference.
+## Configuration
+### Settings
+- **Enable BBCode**: Toggle BBCode processing on/off
+- **Refresh On Active**: Automatically refresh when source becomes active
+- **Default Font**: Set default font for all text
+- **Default Size**: Set default text size
+### Macros
+Save frequently used BBCode combinations as macros for quick insertion:
+1. Click "Edit Macros" button
+2. Create named macros with their BBCode tags
+3. Use macros in text with \{macro_name}\
+## Development
+### Dependencies
+- libobs (OBS Studio core library)
+- obs-frontend-api (for UI features)
+- Windows API (for help window on Windows)
+### Code Style
+- C++20 standard
+- Follow OBS project conventions
+- Use provided CMake helpers
+### Build with Debug Symbols
+\\\ash
+cmake --preset windows-x64
+cmake --build build_x64 --config Debug
+\\\
+## Contributing
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
+## License
+[Specify your license - MIT, GPL, etc.]
+## Support
+- �� [Documentation](https://docs.streamup.tips)
+- 💬 [Discord Community](https://discord.streamup.tips)
+- 🐛 [Report Issues](https://github.com/StreamUPTips/SUP_BB_Code/issues)
+- 🌐 [Website](https://streamup.tips)
+## Version History
+### 0.1.0 (Current)
+- Initial public release
+- Core BBCode parsing and rendering
+- Macro system
+- Text effects and styling
+- Help reference window
+---
+Made with ❤️ by StreamUP Tips
