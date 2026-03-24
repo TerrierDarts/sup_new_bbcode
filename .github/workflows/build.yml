@@ -1,0 +1,103 @@
+name: Build Plugin
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  build-windows:
+    name: Build Windows (x64)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Dependencies
+        run: |
+          choco install cmake -y
+          choco install visualstudio2022buildtools -y
+          
+      - name: Configure
+        run: |
+          cmake --preset windows-x64 -B build
+          
+      - name: Build
+        run: |
+          cmake --build build --config Release
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-windows-x64
+          path: build/Release/*.dll
+
+  build-macos:
+    name: Build macOS (Universal)
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Dependencies
+        run: |
+          brew install cmake obs-studio
+          
+      - name: Configure
+        run: |
+          cmake --preset macos-universal -B build
+          
+      - name: Build
+        run: |
+          cmake --build build --config Release
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-macos-universal
+          path: build/Release/*.bundle
+
+  build-linux:
+    name: Build Linux (x64)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake git libobs-dev libqt6gui6 libqt6core6
+          
+      - name: Configure
+        run: |
+          cmake --preset linux-x64 -B build
+          
+      - name: Build
+        run: |
+          cmake --build build --config Release
+          
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: plugin-linux-x64
+          path: build/Release/*.so
+
+  create-release:
+    name: Create Release
+    needs: [build-windows, build-macos, build-linux]
+    runs-on: ubuntu-latest
+    if: startsWith(github.ref, 'refs/tags/')
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Download all artifacts
+        uses: actions/download-artifact@v3
+        
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            plugin-windows-x64/*
+            plugin-macos-universal/*
+            plugin-linux-x64/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
