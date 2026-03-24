@@ -21,6 +21,7 @@
 !QUICK_START.md
 !SETUP_AUTOMATED_BUILDS.md
 !CHECKLIST.md
+!FINAL_BUILD_SUMMARY.md
 
 # Exclude lock files
 *.lock.json
