@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: plugin-windows-x64
-          path: build/Release/*.dll
+          path: build_x64/Release/*.dll
 
   build-macos:
     name: Build macOS (Universal)
@@ -44,17 +44,17 @@ jobs:
           
       - name: Configure
         run: |
-          cmake --preset macos-universal -B build
+          cmake --preset macos -B build
           
       - name: Build
         run: |
-          cmake --build build --config Release
+          cmake --build build --config RelWithDebInfo
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: plugin-macos-universal
-          path: build/Release/*.bundle
+          path: build_macos/Release/*.bundle
 
   build-linux:
     name: Build Linux (x64)
@@ -69,17 +69,17 @@ jobs:
           
       - name: Configure
         run: |
-          cmake --preset linux-x64 -B build
+          cmake --preset ubuntu-x86_64 -B build
           
       - name: Build
         run: |
-          cmake --build build --config Release
+          cmake --build build --config RelWithDebInfo
           
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
           name: plugin-linux-x64
-          path: build/Release/*.so
+          path: build_x86_64/Release/*.so
 
   create-release:
     name: Create Release
