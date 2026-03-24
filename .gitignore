@@ -15,6 +15,12 @@
 !CMakePresets.json
 !LICENSE
 !README.md
+!BUILD_GUIDE.md
+!BUILD_FIXES.md
+!MIGRATION_SUMMARY.txt
+!QUICK_START.md
+!SETUP_AUTOMATED_BUILDS.md
+!CHECKLIST.md
 
 # Exclude lock files
 *.lock.json
